@@ -7,7 +7,6 @@ import React, { useState } from 'react';
 import FaceRecognition from './components/FaceRecognition';
 
 
-
 function App() {
 
   let [input, setInput] = useState('');
