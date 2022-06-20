@@ -19,17 +19,19 @@ function App() {
   const PAT = 'f57ba082a2454498b51e3e82215effbb';
   const APP_ID = 'face-recognition';
   const MODEL_ID = 'face-detection';
-  const MODEL_VERSION_ID = '45fb9a671625463fa646c3523a3087d5';
-  const IMAGE_URL = 'https://samples.clarifai.com/metro-north.jpg';
+  const MODEL_VERSION_ID = 'fe995da8cb73490f8556416ecf25cea3';
+  //const IMAGE_URL = 'https://samples.clarifai.com/metro-north.jpg';
 
   
 
   function calculateFaceLocation(data){
+    
      const clarifaiFace = JSON.parse(data, null, 2).outputs[0].data.regions[0]
       .region_info.bounding_box;
      const image = document.getElementById("inputImage");
      const width = Number(image.width);
      const height = Number(image.height);
+    console.log("1", clarifaiFace);
      return {
        leftCol: clarifaiFace.left_col * width,
        topRow: clarifaiFace.top_row * height,
@@ -40,8 +42,11 @@ function App() {
   }
 
   function displayFaceBox(wrap){
-    console.log(wrap);
-    setBox({box: wrap});
+    let updatedValue = {};
+    updatedValue = wrap;
+    setBox({
+         ...updatedValue
+       });
   }
 
   function onChangeHandler(e){
@@ -63,7 +68,7 @@ function App() {
         {
             "data": {
                 "image": {
-                    "url": IMAGE_URL
+                    "url": input
                 }
             }
         }
