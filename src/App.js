@@ -4,7 +4,10 @@ import Logo from './components/logo/Logo';
 import LinkForm from './components/link-form/LinkForm';
 import Rank from './components/ranking/Rank';
 import React, { useState } from 'react';
-import FaceRecognition from './components/FaceRecognition';
+import FaceRecognition from './components/FaceRecognition/FaceRecognition';
+import SignIn from './components/SignIn/SignIn';
+import Page404 from './components/Page404';
+import { Routes, Route } from "react-router-dom";
 
 
 
@@ -20,7 +23,7 @@ function App() {
   const APP_ID = 'face-recognition';
   const MODEL_ID = 'face-detection';
   const MODEL_VERSION_ID = 'fe995da8cb73490f8556416ecf25cea3';
-  //const IMAGE_URL = 'https://samples.clarifai.com/metro-north.jpg';
+
 
   
 
@@ -94,13 +97,26 @@ fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/versions/" + MODEL_VE
 
   return (
     <div className="App">
-      
-        <Navigation/>
-        <Logo/>
-        <Rank/>
-        <LinkForm onChangeHandler={onChangeHandler} onSubmit={ onSubmit }/>
-        <FaceRecognition box={box} imageUrl={imageUrl}/>
-        
+      <Routes>
+        <Route path='/SignIn' element={
+          <>
+            <Navigation/>          
+            <Logo/>
+            <SignIn/>
+          </>
+      }/>
+      <Route path='/FaceRecognition' element={
+          <>
+             <Navigation/>          
+             <Logo/>
+             <Rank/>
+             <LinkForm onChangeHandler={onChangeHandler} onSubmit={ onSubmit }/>
+             <FaceRecognition box={box} imageUrl={imageUrl}/>
+          </>
+       } 
+      />
+        <Route path='*' element={<Page404/>}/>
+      </Routes>  
     </div>
   );
 }
