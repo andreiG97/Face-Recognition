@@ -7,6 +7,7 @@ import React, { useState } from 'react';
 import FaceRecognition from './components/FaceRecognition/FaceRecognition';
 import SignIn from './components/SignIn/SignIn';
 import Page404 from './components/Page404';
+import Register from './components/Register/Register';
 import { Routes, Route } from "react-router-dom";
 
 
@@ -98,9 +99,8 @@ fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/versions/" + MODEL_VE
   return (
     <div className="App">
       <Routes>
-        <Route path='/SignIn' element={
-          <>
-            <Navigation/>          
+        <Route path='/' element={
+          <>       
             <Logo/>
             <SignIn/>
           </>
@@ -115,6 +115,12 @@ fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/versions/" + MODEL_VE
           </>
        } 
       />
+      <Route path='/Register' element={
+        <>
+          <Logo/>
+          <Register/>
+        </>
+      }/>
         <Route path='*' element={<Page404/>}/>
       </Routes>  
     </div>
