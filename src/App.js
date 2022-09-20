@@ -18,6 +18,13 @@ function App() {
   let [input, setInput] = useState('');
   let [imageUrl, setImageUrl] = useState('');
   let [box, setBox] = useState({});
+  let [user, setUser] = useState({
+    id: '',
+    name: '',
+    email: '',
+    entries: 0,
+    joined: ''
+  });
 
   const USER_ID = 'andreippa97';
   const PAT = 'f57ba082a2454498b51e3e82215effbb';
@@ -25,8 +32,18 @@ function App() {
   const MODEL_ID = 'face-detection';
   const MODEL_VERSION_ID = 'fe995da8cb73490f8556416ecf25cea3';
 
-
   
+
+  function loadUserHandler(data){
+    setUser(user= {
+      id: data.id,
+      name: data.name,
+      email: data.email,
+      entries: data.entries,
+      joined: data.joined
+    })
+    console.log("App", user);
+  }
 
   function calculateFaceLocation(data){
     
@@ -57,11 +74,11 @@ function App() {
     setInput(e.target.value);
     
   }
-
+//why is every change submited ?
 
   function onSubmit(){
     setImageUrl(input);
-   console.log(box); 
+    // console.log(box); 
    
    const raw = JSON.stringify({
     "user_app_id": {
@@ -91,7 +108,22 @@ const requestOptions = {
 
 fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/versions/" + MODEL_VERSION_ID + "/outputs", requestOptions)
     .then((response) => response.text())
-    .then((result) => displayFaceBox(calculateFaceLocation(result)))
+    .then((result) =>{
+      if (result){
+        fetch('http://localhost:3000/image', {
+          method: 'put',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            id: user.id
+          })
+        })
+        .then(response => response.json())
+        .then(count => {
+          setUser(Object.assign(user, {entries: count}));
+        });
+      }
+      displayFaceBox(calculateFaceLocation(result))
+    })
     .catch(error => console.log('error', error));
     
   }
@@ -102,14 +134,14 @@ fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/versions/" + MODEL_VE
         <Route path='/' element={
           <>       
             <Logo/>
-            <SignIn/>
+            <SignIn loadUserHandler = {loadUserHandler}/>
           </>
       }/>
       <Route path='/FaceRecognition' element={
           <>
              <Navigation/>          
              <Logo/>
-             <Rank/>
+             <Rank name={user.name} entries={user.entries}/>
              <LinkForm onChangeHandler={onChangeHandler} onSubmit={ onSubmit }/>
              <FaceRecognition box={box} imageUrl={imageUrl}/>
           </>
@@ -118,7 +150,7 @@ fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/versions/" + MODEL_VE
       <Route path='/Register' element={
         <>
           <Logo/>
-          <Register/>
+          <Register loadUserHandler = {loadUserHandler}/>
         </>
       }/>
         <Route path='*' element={<Page404/>}/>
