@@ -41,7 +41,7 @@ function Register(props) {
         .then(response => response.json())
         .then(data => {
             console.log(data);
-            if(data){
+            if(data !== 'User already exists' && (data.email !== '' && data.name !== '' && data.password !== '')){
                 loadUserHandler(data);
                 setRegister(register = true);
                 navigate('/FaceRecognition', {replace: true})
@@ -57,15 +57,15 @@ function Register(props) {
                         <legend className="f4 fw6 ph0 mh0">Sign Up</legend>
                         <div className="mt3">
                             <label className="db fw6 lh-copy f6" htmlFor="user" >Username</label>
-                            <input className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" type="text" name="user" id="user" onChange={nameHandler} />
+                            <input required className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" type="text" name="user" id="user" onChange={nameHandler} />
                         </div>
                         <div className="mt3">
                             <label className="db fw6 lh-copy f6" htmlFor="email-address" >Email</label>
-                            <input className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" type="email" name="email-address" id="email-address" onChange={emailHandler}/>
+                            <input required className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" type="email" name="email-address" id="email-address" onChange={emailHandler}/>
                         </div>
                         <div className="mv3">
                             <label className="db fw6 lh-copy f6" htmlFor="password" >Password</label>
-                            <input className="b pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" type="password" name="password" id="password" onChange={passwordHandler}/>
+                            <input required className="b pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" type="password" name="password" id="password" onChange={passwordHandler}/>
                         </div>
                     </fieldset>
                     <div className="">
