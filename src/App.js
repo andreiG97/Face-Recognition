@@ -9,6 +9,7 @@ import SignIn from './components/SignIn/SignIn';
 import Page404 from './components/Page404';
 import Register from './components/Register/Register';
 import { Routes, Route } from "react-router-dom";
+import ParticlesBg from 'particles-bg';
 
 
 
@@ -42,7 +43,6 @@ function App() {
       entries: data.entries,
       joined: data.joined
     })
-    console.log("App", user);
   }
 
   function calculateFaceLocation(data){
@@ -52,7 +52,7 @@ function App() {
      const image = document.getElementById("inputImage");
      const width = Number(image.width);
      const height = Number(image.height);
-    console.log("1", clarifaiFace);
+
      return {
        leftCol: clarifaiFace.left_col * width,
        topRow: clarifaiFace.top_row * height,
@@ -74,11 +74,9 @@ function App() {
     setInput(e.target.value);
     
   }
-//why is every change submited ?
 
   function onSubmit(){
     setImageUrl(input);
-    // console.log(box); 
    
    const raw = JSON.stringify({
     "user_app_id": {
@@ -89,7 +87,7 @@ function App() {
         {
             "data": {
                 "image": {
-                    "url": input
+                    "url": imageUrl
                 }
             }
         }
@@ -119,7 +117,7 @@ fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/versions/" + MODEL_VE
         })
         .then(response => response.json())
         .then(count => {
-          setUser(Object.assign(user, {entries: count}));
+          setUser({...user, entries: count}); 
         });
       }
       displayFaceBox(calculateFaceLocation(result))
@@ -130,6 +128,7 @@ fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/versions/" + MODEL_VE
 
   return (
     <div className="App">
+       <ParticlesBg type="circle" bg={true} />
       <Routes>
         <Route path='/' element={
           <>       
